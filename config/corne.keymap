@@ -19,15 +19,23 @@
 };
 
 / {
-        / {
-            combos {
+        combos {
                 compatible = "zmk,combos";
                 combo_esc {
-                    timeout-ms = <20>;
-                    key-positions = <15 16>;
-                    bindings = <&kp ESC>;
+                        timeout-ms = <20>;
+                        key-positions = <15 16>;
+                        bindings = <&kp ESC>;
                 };
-            };
+                combo_ent {
+                        timeout-ms = <20>;
+                        key-positions = <19 20>;
+                        bindings = <&kp RET>;
+                };
+                combo_colon {
+                        timeout-ms = <20>;
+                        key-positions = <20 21>;
+                        bindings = <&kp COLON>;
+                };
         };
 
         keymap {
