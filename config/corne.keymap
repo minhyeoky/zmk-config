@@ -122,7 +122,7 @@
                 };
                 lower_layer {
                         bindings = <
-   &trans &kp display_1 &kp display_2 &kp display_3 &kp display_4 &kp display_5   &trans &trans  &kp C_BRI_DN &kp C_BRI_UP &trans &trans
+   &trans &display_1 &display_2 &display_3 &display_4 &display_5   &trans &trans  &kp C_BRI_DN &kp C_BRI_UP &trans &trans
    &trans &trans   &trans &trans   &trans   &trans      &kp K_PREV &kp K_VOL_DN &kp K_VOL_UP &kp K_NEXT &trans &trans
    &trans &trans   &trans &trans   &trans   &trans      &kp UNDER &kp K_PP  &kp LBRC        &kp RBRC &kp PIPE &kp TILDE
                              &kp LGUI &trans   &kp SPACE   &kp RET   &trans    &kp RALT
