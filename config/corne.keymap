@@ -54,12 +54,12 @@
                 combo_lbrc {
                         timeout-ms = <20>;
                         key-positions = <31 32>;
-                        bindings = <&kp LBRC>;
+                        bindings = <&kp LBKT>;
                 };
                 combo_rbrc {
                         timeout-ms = <20>;
                         key-positions = <32 33>;
-                        bindings = <&kp RBRC>;
+                        bindings = <&kp RBKT>;
                 };
         };
 
@@ -99,6 +99,36 @@
                         , <&macro_tap &kp N5>
                         , <&macro_release &kp LCTRL>;
                 };
+                browse_back: browse_back {
+                        compatible = "zmk,behavior-macro";
+                        #binding-cells = <0>;
+                        bindings = <&macro_press &kp LGUI>
+                        , <&macro_tap &kp LBKT>
+                        , <&macro_release &kp LGUI>;
+                };
+                browse_forward: browse_forward {
+                        compatible = "zmk,behavior-macro";
+                        #binding-cells = <0>;
+                        bindings = <&macro_press &kp LGUI>
+                        , <&macro_tap &kp RBKT>
+                        , <&macro_release &kp LGUI>;
+                };
+                browse_prev: browse_prev {
+                        compatible = "zmk,behavior-macro";
+                        #binding-cells = <0>;
+                        bindings = <&macro_press &kp LCTRL>
+                        , <&macro_press &kp LSHFT>
+                        , <&macro_tap &kp TAB>
+                        , <&macro_release &kp LSHFT>
+                        , <&macro_release &kp LCTRL>;
+                };
+                browse_next: browse_next {
+                        compatible = "zmk,behavior-macro";
+                        #binding-cells = <0>;
+                        bindings = <&macro_press &kp LCTRL>
+                        , <&macro_tap &kp TAB>
+                        , <&macro_release &kp LCTRL>;
+                };
         };
 
         chosen {
@@ -123,7 +153,7 @@
                 lower_layer {
                         bindings = <
    &trans &display_1 &display_2 &display_3 &display_4 &display_5   &trans &trans  &kp C_BRI_DN &kp C_BRI_UP &trans &trans
-   &trans &trans   &trans &trans   &trans   &trans      &kp K_PREV &kp K_VOL_DN &kp K_VOL_UP &kp K_NEXT &trans &trans
+   &trans &browse_back   &browse_prev &browse_next   &browse_forward   &trans      &kp K_PREV &kp K_VOL_DN &kp K_VOL_UP &kp K_NEXT &trans &trans
    &trans &trans   &trans &trans   &trans   &trans      &kp UNDER &kp K_PP  &kp LBRC        &kp RBRC &kp PIPE &kp TILDE
                              &kp LGUI &trans   &kp SPACE   &kp RET   &trans    &kp RALT
                         >;
