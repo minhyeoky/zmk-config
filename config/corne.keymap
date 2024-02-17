@@ -46,6 +46,16 @@
                         key-positions = <30 31>;
                         bindings = <&kp B>;
                 };
+                combo_lbrc {
+                        timeout-ms = <20>;
+                        key-positions = <31 32>;
+                        bindings = <&kp LBRC>;
+                };
+                combo_rbrc {
+                        timeout-ms = <20>;
+                        key-positions = <32 33>;
+                        bindings = <&kp RBRC>;
+                };
         };
 
         chosen {
