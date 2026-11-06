@@ -1,0 +1,182 @@
+/*
+ * minhyeoky keymap for the wireless Corne (beekeeb, nice!nano v2 + nice!view)
+ *
+ * Ported from the QMK keymap (crkbd/keymaps/minhyeoky, branch keymap/os-mode).
+ *
+ * Platform mode (mac / win)
+ *   QMK stored the mode as one EEPROM bit (swap_lctl_lgui) that swapped Ctrl
+ *   and GUI in every keymap keycode. ZMK has no such swap, so win mode is a
+ *   pair of layers: BASE_W overrides the keys that differ on BASE, and NAV_W
+ *   is a full copy of NAV with Ctrl/GUI swapped (a hold from BASE_W reaches
+ *   NAV_W only, so NAV_W cannot fall through to NAV).
+ *
+ *   The PC is picked by Bluetooth profile, and the profile and the platform
+ *   are the same fact: &pc_mac / &pc_win select the profile and the layer in
+ *   one press. Layers are not persisted across power cycles while the profile
+ *   is, so after a reboot on the win PC press &pc_win (or &tog BASE_W) once.
+ *
+ *   Profiles: 0 = PC1 (mac), 1 = PC2 (win), 2 = phone.
+ *
+ * Keys the 42-key board has no room for (the QMK ex2 column):
+ *   KVM_TOGGLE   -> &pc_mac / &pc_win on MANAGE (the KVM hotkey cannot reach
+ *                   a Bluetooth keyboard, so the keyboard switches itself)
+ *   SEC_PW       -> NAV, Y position
+ *   PLAT_TOGGLE  -> &tog BASE_W on MANAGE
+ *   KVM_BEEP_OFF -> dropped (same reason as KVM_TOGGLE)
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/pointing.h>
+
+#define BASE    0
+#define BASE_W  1
+#define SYMBOL  2
+#define NAV     3
+#define NAV_W   4
+#define MANAGE  5
+#define DANGER  6
+
+#if __has_include("secrets.dtsi")
+#include "secrets.dtsi"
+#else
+/ {
+    macros {
+        sec_pw: sec_pw {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&none>;
+        };
+    };
+};
+#endif
+
+&lt {
+    flavor = "balanced";        // QMK PERMISSIVE_HOLD
+    tapping-term-ms = <150>;
+    quick-tap-ms = <150>;       // QMK QUICK_TAP_TERM defaults to TAPPING_TERM
+};
+
+&sk {
+    release-after-ms = <5000>;  // QMK ONESHOT_TIMEOUT
+};
+
+/ {
+    combos {
+        compatible = "zmk,combos";
+        // QMK COMBO_TERM 20. Positions: 0-11 top row, 12-23 home, 24-35 bottom, 36-41 thumbs.
+        jk_enter { timeout-ms = <20>; key-positions = <19 20>; bindings = <&kp RET>;   layers = <BASE BASE_W>; };
+        ui_minus { timeout-ms = <20>; key-positions = <7 8>;   bindings = <&kp MINUS>; layers = <BASE BASE_W>; };
+        io_equal { timeout-ms = <20>; key-positions = <8 9>;   bindings = <&kp EQUAL>; layers = <BASE BASE_W>; };
+        mc_lbkt  { timeout-ms = <20>; key-positions = <31 32>; bindings = <&kp LBKT>;  layers = <BASE BASE_W>; };
+        cd_rbkt  { timeout-ms = <20>; key-positions = <32 33>; bindings = <&kp RBKT>;  layers = <BASE BASE_W>; };
+        df_esc   { timeout-ms = <20>; key-positions = <15 16>; bindings = <&kp ESC>;   layers = <BASE BASE_W>; };
+        kl_colon { timeout-ms = <20>; key-positions = <20 21>; bindings = <&kp COLON>; layers = <BASE BASE_W>; };
+        nm_b     { timeout-ms = <20>; key-positions = <30 31>; bindings = <&kp B>;     layers = <BASE BASE_W>; };
+    };
+
+    macros {
+        pc_mac: pc_mac {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&bt BT_SEL 0>, <&to BASE>;
+        };
+        pc_win: pc_win {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&bt BT_SEL 1>, <&to BASE_W>;
+        };
+        phone: phone {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&bt BT_SEL 2>, <&to BASE>;
+        };
+        slack_link: slack_link {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            // a binding's post-release wait is the wait-ms in effect when it is queued
+            bindings = <&macro_wait_time 50>, <&mkp RCLK>, <&kp L>;
+        };
+        capture: capture {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_wait_time 200>, <&kp LC(LS(LG(N4)))>, <&kp SPACE>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        base {
+            display-name = "MAC";
+            bindings = <
+   &kp TAB    &kp Q &kp W &kp E &kp R &kp T                     &kp Y &kp U &kp I     &kp O   &kp SEMI &kp BSLH
+   &sk LCTRL  &kp A &kp S &kp D &kp F &kp G                     &kp H &kp J &kp K     &kp L   &kp P    &kp SQT
+   &kp LSHFT  &kp Z &kp X &kp C &kp V &kp B                     &kp N &kp M &kp COMMA &kp DOT &kp FSLH &sk RSHFT
+                     &sk LALT &sk LGUI &lt NAV RET     &kp BSPC &lt SYMBOL SPACE &kp RGUI
+            >;
+        };
+
+        base_w {
+            display-name = "WIN";
+            bindings = <
+   &trans    &trans &trans &trans &trans &trans             &trans &trans &trans &trans &trans &trans
+   &sk LGUI  &trans &trans &trans &trans &trans             &trans &trans &trans &trans &trans &trans
+   &trans    &trans &trans &trans &trans &trans             &trans &trans &trans &trans &trans &trans
+                     &trans &sk LCTRL &lt NAV_W RET     &trans &trans &kp LANG1
+            >;
+        };
+
+        symbol {
+            display-name = "SYM";
+            bindings = <
+   &trans &kp N1 &kp N2   &kp N3   &kp N4    &kp N5               &kp N6   &kp N7   &kp N8 &kp N9    &kp N0 &none
+   &trans &none  &kp LBRC &kp RBRC &kp GRAVE &kp TILDE            &kp LEFT &kp DOWN &kp UP &kp RIGHT &none  &none
+   &trans &none  &kp LPAR &kp RPAR &kp LBKT  &kp RBKT             &none    &none    &trans &trans    &none  &trans
+                          &trans   &trans    &kp SPACE      &trans &trans &trans
+            >;
+        };
+
+        nav {
+            display-name = "NAV";
+            bindings = <
+   &trans      &kp LC(N1)   &kp LC(N2)    &kp LC(N3)    &kp LC(N4)  &kp LC(N5)         &sec_pw &kp N7 &kp N8 &kp N9 &none  &trans
+   &trans      &kp LG(LBKT) &kp LS(LC(TAB)) &kp LC(TAB) &kp LG(RBKT) &kp LA(LS(TAB))   &none   &kp N4 &kp N5 &kp N6 &none  &trans
+   &mo MANAGE  &kp LC(LEFT) &kp LC(UP)    &kp LC(RIGHT) &slack_link &capture           &none   &kp N1 &kp N2 &kp N3 &trans &kp N0
+                                          &trans        &trans      &trans       &trans &kp N0 &kp N0
+            >;
+        };
+
+        nav_w {
+            display-name = "NAV";
+            bindings = <
+   &trans      &kp LG(N1)   &kp LG(N2)    &kp LG(N3)        &kp LG(N4)   &kp LG(N5)        &sec_pw &kp N7 &kp N8 &kp N9 &none  &trans
+   &trans      &kp LC(LBKT) &kp LS(LG(TAB)) &kp LG(TAB)     &kp LC(RBKT) &kp LA(LS(TAB))   &none   &kp N4 &kp N5 &kp N6 &none  &trans
+   &mo MANAGE  &kp LG(LC(LEFT)) &kp LG(UP) &kp LG(LC(RIGHT)) &slack_link &capture          &none   &kp N1 &kp N2 &kp N3 &trans &kp N0
+                                          &trans            &trans       &trans      &trans &kp N0 &kp N0
+            >;
+        };
+
+        manage {
+            display-name = "MGMT";
+            bindings = <
+   &none           &pc_mac &pc_win &phone &none &none            &none  &none        &kp C_BRI_DN &kp C_BRI_UP &none &kp C_SLEEP
+   &tog BASE_W     &none   &none   &none  &none &none            &kp C_PREV &kp C_VOL_DN &kp C_VOL_UP &kp C_NEXT &none &none
+   &none           &none   &none   &none  &none &none            &none  &none        &kp C_PP     &none        &none &mo DANGER
+                                   &none  &none &none      &none &none &none
+            >;
+        };
+
+        danger {
+            // Reached by Enter-hold + MANAGE + DANGER, like QMK.
+            display-name = "DANGER";
+            bindings = <
+   &none &bootloader &none &none &none &none            &none &none &none &none &none &bootloader
+   &none &bt BT_CLR  &none &none &none &none            &none &none &none &none &none &none
+   &none &none       &none &none &none &none            &none &none &none &none &none &none
+                     &none &none &none            &none &none &none
+            >;
+        };
+    };
+};

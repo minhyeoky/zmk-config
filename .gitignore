@@ -1,0 +1,4 @@
+config/secrets.dtsi
+build/
+zmk-workspace/
+firmware/
