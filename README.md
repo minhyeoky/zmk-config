@@ -1,6 +1,6 @@
 # zmk-config — wireless Corne (beekeeb, nice!nano v2 + nice!view)
 
-ZMK v0.3. Keymap ported from the QMK keymap `crkbd/keymaps/minhyeoky` (branch `keymap/os-mode` in `~/qmk-osmode`).
+ZMK v0.3. Keymap ported from the QMK keymap [`crkbd/keymaps/minhyeoky`](https://github.com/minhyeoky/qmk_firmware/tree/master/keyboards/crkbd/keymaps/minhyeoky).
 
 ## Build
 
@@ -10,7 +10,7 @@ ZMK v0.3. Keymap ported from the QMK keymap `crkbd/keymaps/minhyeoky` (branch `k
 
 - The ZMK workspace lives in the Docker volume `zmk-workspace` (first build clones ZMK + Zephyr).
 - `SEC_PW` comes from the QMK `secrets.h` (override with `SECRETS=...`). `scripts/gen_secrets.py` turns it into `config/secrets.dtsi`, which is gitignored. Without it, `SEC_PW` does nothing.
-- No GitHub remote on purpose: a GitHub Actions build would need the password in the repo or in a workflow secret.
+- Builds run locally rather than in GitHub Actions, so the password never leaves the machine.
 
 ## Flash
 

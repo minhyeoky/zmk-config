@@ -1,7 +1,7 @@
 /*
  * minhyeoky keymap for the wireless Corne (beekeeb, nice!nano v2 + nice!view)
  *
- * Ported from the QMK keymap (crkbd/keymaps/minhyeoky, branch keymap/os-mode).
+ * Ported from the QMK keymap (minhyeoky/qmk_firmware, keyboards/crkbd/keymaps/minhyeoky).
  *
  * Platform mode (mac / win)
  *   QMK stored the mode as one EEPROM bit (swap_lctl_lgui) that swapped Ctrl
